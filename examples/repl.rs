@@ -1,19 +1,28 @@
-use std::io;
-
-use reader::reader::{read, Reader};
+use reader::{
+    error::ReadError,
+    reader::{read, Reader},
+};
 
 fn main() {
-    // Read a line of input from the user
-    let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line");
+    let mut files = vec![];
 
-    let mut reader = Reader::from(input.trim());
+    for arg in std::env::args().skip(1) {
+        let fname = arg;
+        let contents = std::fs::read(fname.clone()).unwrap();
 
-    // Parse the input into a vector of ParserItem
-    match read(&mut reader) {
-        Ok(items) => println!("Parsed items: {:?}", items),
-        Err(msg) => println!("Error: {}", msg),
+        files.push((fname.to_string(), contents.clone()));
+    }
+
+    for file in files {
+        let content = &String::from_utf8(file.1).unwrap();
+        let mut reader = Reader::from(content);
+
+        loop {
+            match read(&mut reader) {
+                Ok(items) => println!("Parsed items: {:?}", items),
+                Err(ReadError::EndOfInput) => break,
+                Err(msg) => println!("Error: {}", msg),
+            }
+        }
     }
 }
