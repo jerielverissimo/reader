@@ -37,6 +37,10 @@ pub fn read(r: &mut Reader) -> Result<Expr, ReadError> {
             r.next()?;
             read_seq(r, ')')
         }
+        '[' => {
+            r.next()?;
+            read_seq(r, ']')
+        }
         _ => {
             let atom = read_atom(r)?;
             Ok(parse_atom(atom))
@@ -65,7 +69,13 @@ fn read_seq(r: &mut Reader, end: char) -> Result<Expr, ReadError> {
         seq.push(expr);
     }
 
-    Ok(Expr::List(seq))
+    let result = match end {
+        ')' => Expr::List(seq),
+        ']' => Expr::Vector(seq),
+        c => return Err(ReadError::Unexpected(c)),
+    };
+
+    Ok(result)
 }
 
 fn parse_atom(atom: String) -> Expr {

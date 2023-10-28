@@ -5,6 +5,7 @@ pub enum Expr {
     Int(Int),
     Nil,
     List(Vec<Expr>),
+    Vector(Vec<Expr>),
 }
 
 pub type Int = i64;
