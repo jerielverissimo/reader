@@ -1,6 +1,6 @@
 use std::io;
 
-use reader::reader::{read, Expr};
+use reader::reader::{read, Reader};
 
 fn main() {
     // Read a line of input from the user
@@ -9,9 +9,11 @@ fn main() {
         .read_line(&mut input)
         .expect("Failed to read line");
 
-    // Parse the input into a vector of ParserItem
-    let items: Vec<Expr> = read(input.trim());
+    let mut reader = Reader::from(input.trim());
 
-    // Print the parsed items
-    println!("Parsed items: {:?}", items);
+    // Parse the input into a vector of ParserItem
+    match read(&mut reader) {
+        Ok(items) => println!("Parsed items: {:?}", items),
+        Err(msg) => println!("Error: {}", msg),
+    }
 }
