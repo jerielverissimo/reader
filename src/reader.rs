@@ -41,6 +41,10 @@ pub fn read(r: &mut Reader) -> Result<Expr, ReadError> {
             r.next()?;
             read_seq(r, ']')
         }
+        '"' => {
+            r.next()?;
+            read_string(r)
+        }
         _ => {
             let atom = read_atom(r)?;
             Ok(parse_atom(atom))
@@ -113,6 +117,21 @@ fn read_atom(r: &mut Reader) -> Result<String, ReadError> {
         }
     }
     Ok(chars.into_iter().collect())
+}
+
+fn read_string(r: &mut Reader) -> Result<Expr, ReadError> {
+    let mut chars: Vec<char> = vec![];
+    loop {
+        match r.next() {
+            Err(ReadError::EndOfInput) => return Err(ReadError::Missing(String::from("\""))),
+            Ok('"') => break,
+            Ok('\\') => todo!(),
+            Ok(c) => chars.push(c),
+            Err(msg) => return Err(msg),
+        }
+    }
+    let string = chars.into_iter().collect();
+    Ok(Expr::Str(string))
 }
 
 #[inline]

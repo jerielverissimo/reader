@@ -2,6 +2,7 @@
 pub enum Expr {
     Bool(bool),
     Sym(String),
+    Str(String),
     Int(Int),
     Nil,
     List(Vec<Expr>),
