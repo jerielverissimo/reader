@@ -87,13 +87,24 @@ fn parse_atom(atom: String) -> Expr {
         "true" => Expr::Bool(true),
         "false" => Expr::Bool(false),
         "nil" => Expr::Nil,
-        _ => number_or_symbol(atom),
+        _ => atom_expr(atom),
     }
 }
 
-fn number_or_symbol(atom: String) -> Expr {
+fn atom_expr(atom: String) -> Expr {
     if let Ok(num) = atom.parse::<Int>() {
         Expr::Int(num)
+    } else if atom.starts_with(":") {
+        if atom.contains("/") {
+            let split: Vec<&str> = atom.split("/").collect();
+            let (namespace, name) = (split[0], split[1]);
+            Expr::Keyword(crate::types::Keyword::Namespaced(
+                namespace[1..].to_string(),
+                name.to_string(),
+            ))
+        } else {
+            Expr::Keyword(crate::types::Keyword::Simple(atom[1..].to_string()))
+        }
     } else {
         Expr::Sym(atom)
     }
