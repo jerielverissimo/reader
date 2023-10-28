@@ -1,0 +1,18 @@
+123
+-4
+"jeriel"
+name/func
+:name/key
+-main
+':name/key
+`:name/key
+~:name/key
+~@:name/key
+^:name/key
+@:name/key
+(123     "xablau" ,,,,, :keyword)
+(+ (* 2 4) 2)
+(defn -main [& args] (println "Hello, World!"))
+true
+false
+nil

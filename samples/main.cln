@@ -1,0 +1,4 @@
+(defn add [a b] (+ a b))
+
+(defn -main [& args]
+ (add 2 2))
