@@ -1,11 +1,3 @@
-<<<<<<< Updated upstream
-#[derive(Debug)]
-pub enum Expr {}
-
-pub fn read(input: &str) -> Vec<Expr> {
-    let mut parsed = vec![];
-    parsed
-=======
 use std::{
     path::{Path, PathBuf},
     str::FromStr,
@@ -164,6 +156,10 @@ fn read_form(file_id: FileId, bytes: &[u8], index: &mut usize) -> (Token, Option
         } else {
             break;
         }
+    }
+
+    if *index == bytes.len() {
+        *index -= 1;
     }
 
     match bytes[*index] {
@@ -551,5 +547,4 @@ fn read_atom(file_id: FileId, bytes: &[u8], index: &mut usize) -> (Token, Option
 
         (Token::unknown(span), error)
     }
->>>>>>> Stashed changes
 }

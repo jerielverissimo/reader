@@ -75,7 +75,7 @@ pub fn display_message_with_span(
                     file_contents,
                     line_spans[line_index - 1],
                     span,
-                    line_index - 1,
+                    line_index,
                     largest_line_number,
                 );
             }
@@ -84,7 +84,7 @@ pub fn display_message_with_span(
                 file_contents,
                 line_spans[line_index],
                 span,
-                line_index,
+                line_index + 1,
                 largest_line_number,
             );
 
